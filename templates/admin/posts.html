@@ -1,0 +1,34 @@
+{% extends "admin/admin_base.html" %}
+{% block content %}
+<div class="top-row">
+    <h1>Матеріали</h1>
+    <a class="button" href="{{ url_for('admin_post_add') }}">Додати матеріал</a>
+</div>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Назва</th>
+        <th>Категорія</th>
+        <th>Статус</th><th>Дата</th>
+        <th>Дії</th>
+    </tr>
+    {% for post in posts %}
+    <tr>
+        <td>{{ post.id }}</td>
+        <td>{{ post.title }}</td>
+        <td>{{ post.category_name }}</td>
+        <td>{{ post.status }}</td><td>{{ post.created_at }}</td>
+        <td>
+            <a href="{{ url_for('admin_post_edit', post_id=post.id) }}">Редагувати</a>
+            {% if post.status == 'review' and ('admin' in session.get('roles',[]) or 'publisher' in session.get('roles',[])) %}
+            <form method="post" style="display:inline" action="{{ url_for('admin_post_publish', post_id=post.id) }}"><input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button type="submit">Опублікувати</button></form>
+            {% endif %}
+            |
+            <form method="post" style="display:inline" action="{{ url_for('admin_post_delete', post_id=post.id) }}">
+<input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button type="submit" onclick="return confirm('Видалити?')">Видалити</button></form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block title %}{{ tr('home') }} · {{ tr('site_name') }}{% endblock %}
+{% block content %}
+
+<section class="hero">
+    <div class="container hero-grid">
+        <div class="hero-content">
+            <span class="eyebrow">{{ tr('hero_label') }}</span>
+            <h1>{{ tr('hero_title') }}</h1>
+            <p>{{ tr('hero_text') }}</p>
+            <div class="hero-actions">
+                <a class="button button-primary" href="{{ url_for('news', lang=g.lang) }}">{{ tr('view_news') }}</a>
+                <a class="button button-light" href="{{ url_for('page_detail', lang=g.lang, slug='about') }}">{{ tr('learn_more') }}</a>
+            </div>
+        </div>
+
+        <div class="hero-card">
+            <div class="hero-card-inner">
+                <span class="hero-year">2026</span>
+                <h2>{{ tr('portal_for_community') }}</h2>
+                <p>{{ tr('portal_card_text') }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="stats-strip">
+    <div class="container stats-grid">
+        <div><strong data-count="{{ stats.materials }}">0</strong><span>{{ tr('stats_materials') }}</span></div>
+        <div><strong data-count="{{ stats.events }}">0</strong><span>{{ tr('stats_events') }}</span></div>
+        <div><strong data-count="{{ stats.photos }}">0</strong><span>{{ tr('stats_photos') }}</span></div>
+        <div><strong data-count="{{ stats.languages }}">0</strong><span>{{ tr('stats_languages') }}</span></div>
+    </div>
+</section>
+
+<section class="support-block">
+    <div class="container support-grid">
+        <div>
+            <span class="eyebrow dark">{{ tr('important_block') }}</span>
+            <h2>{{ tr('support_info') }}</h2>
+            <p>{{ tr('support_text') }}</p>
+        </div>
+        <a class="button button-primary" href="{{ url_for('media', lang=g.lang) }}">{{ tr('go_media') }}</a>
+    </div>
+</section>
+
+<section class="container section">
+    <div class="section-title">
+        <span class="eyebrow dark">{{ tr('directions') }}</span>
+        <h2>{{ tr('main_sections') }}</h2>
+    </div>
+
+    <div class="feature-grid">
+        <article class="feature-card">
+            <span class="feature-icon">01</span>
+            <h3>{{ tr('activity') }}</h3>
+            <p>{{ tr('activity_text') }}</p>
+        </article>
+        <article class="feature-card">
+            <span class="feature-icon">02</span>
+            <h3>{{ tr('news') }}</h3>
+            <p>{{ tr('news_text') }}</p>
+        </article>
+        <article class="feature-card">
+            <span class="feature-icon">03</span>
+            <h3>{{ tr('events') }}</h3>
+            <p>{{ tr('events_text') }}</p>
+        </article>
+        <article class="feature-card">
+            <span class="feature-icon">04</span>
+            <h3>{{ tr('media_page_title') }}</h3>
+            <p>{{ tr('media_text') }}</p>
+        </article>
+    </div>
+</section>
+
+<section class="container section">
+    <div class="section-title row-title">
+        <div>
+            <span class="eyebrow dark">{{ tr('latest_materials') }}</span>
+            <h2>{{ tr('news') }}</h2>
+        </div>
+        <a href="{{ url_for('news', lang=g.lang) }}">{{ tr('all_news') }}</a>
+    </div>
+
+    <div class="cards news-grid">
+        {% for post in posts %}
+        <article class="card news-card">
+            {% if post.image %}
+            <img src="{{ url_for('static', filename='uploads/' ~ post.image) }}" alt="">
+            {% else %}
+            <div class="image-placeholder">NEWS</div>
+            {% endif %}
+            <div class="card-body">
+                <span class="tag">{{ post.category_name or tr('news') }}</span>
+                <h3>{{ localized(post, 'title') }}</h3>
+                <p>{{ localized(post, 'short_text') }}</p>
+                <a href="{{ url_for('post_detail', lang=g.lang, post_id=post.id) }}">{{ tr('read_more') }}</a>
+            </div>
+        </article>
+        {% else %}
+        <div class="empty-state">
+            <h3>{{ tr('empty_title') }}</h3>
+            <p>{{ tr('empty_text') }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="container section">
+    <div class="section-title row-title">
+        <div>
+            <span class="eyebrow dark">{{ tr('calendar') }}</span>
+            <h2>{{ tr('nearest_events') }}</h2>
+        </div>
+        <a href="{{ url_for('events', lang=g.lang) }}">{{ tr('all_events') }}</a>
+    </div>
+
+    <div class="event-list">
+        {% for event in events %}
+        <article class="event-card">
+            <div class="event-date">{{ event.event_date }}</div>
+            <div>
+                <h3>{{ localized(event, 'title') }}</h3>
+                <p>{{ localized(event, 'description') }}</p>
+                <small>{{ localized(event, 'location') }}</small>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="donate-section">
+    <div class="container donate-grid">
+        <div>
+            <span class="eyebrow">{{ tr('support') }}</span>
+            <h2>{{ tr('support_project') }}</h2>
+            <p>{{ tr('support_project_text') }}</p>
+        </div>
+        <a class="button button-primary" href="#">{{ tr('support_button') }}</a>
+    </div>
+</section>
+
+{% endblock %}

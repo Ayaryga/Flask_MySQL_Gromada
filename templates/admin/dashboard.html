@@ -1,0 +1,10 @@
+{% extends "admin/admin_base.html" %}
+{% block content %}
+<h1>Панель адміністратора</h1>
+<div class="cards">
+    <div class="card"><h3>Матеріали</h3><p>{{ posts_count }}</p></div>
+    <div class="card"><h3>Медіа</h3><p>{{ media_count }}</p></div>
+    <div class="card"><h3>Сторінки</h3><p>{{ pages_count }}</p></div>
+    <div class="card"><h3>Події</h3><p>{{ events_count }}</p></div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ tr('events') }}{% endblock %}
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow">{{ tr('calendar') }}</span>
+        <h1>{{ tr('event_page_title') }}</h1>
+        <p>{{ tr('event_page_text') }}</p>
+    </div>
+</section>
+
+<section class="container section">
+    <div class="event-list">
+        {% for event in events %}
+        <article class="event-card">
+            <div class="event-date">{{ event.event_date }}</div>
+            <div>
+                <h3>{{ localized(event, 'title') }}</h3>
+                <p>{{ localized(event, 'description') }}</p>
+                <small>{{ localized(event, 'location') }}</small>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

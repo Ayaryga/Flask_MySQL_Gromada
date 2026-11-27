@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ localized(page, 'title') }}{% endblock %}
+{% block content %}
+<section class="page-hero compact">
+    <div class="container">
+        <span class="eyebrow">{{ tr('page') }}</span>
+        <h1>{{ localized(page, 'title') }}</h1>
+    </div>
+</section>
+
+<section class="container article">
+    <p>{{ localized(page, 'content') }}</p>
+</section>
+{% endblock %}

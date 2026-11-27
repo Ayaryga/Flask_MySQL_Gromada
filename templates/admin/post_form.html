@@ -1,0 +1,66 @@
+{% extends "admin/admin_base.html" %}
+{% block content %}
+<style>.post-photos-preview{display:flex;gap:12px;flex-wrap:wrap;margin:12px 0 24px}.post-photos-preview img{height:100px;width:150px;object-fit:cover;border-radius:8px}</style>
+<h1>{% if post %}Редагування{% else %}Додавання{% endif %} матеріалу</h1>
+
+<form method="post" enctype="multipart/form-data" class="form">
+<input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <div class="language-tabs">
+        <strong>Контент трьома мовами</strong>
+        <span>UK / EN / DE</span>
+    </div>
+
+    <h2>Українська</h2>
+    <label>Назва UK</label>
+    <input type="text" name="title_uk" value="{{ post.title_uk if post else '' }}">
+    <label>Короткий опис UA</label>
+    <textarea name="short_text_uk">{{ post.short_text_uk if post else '' }}</textarea>
+    <label>Повний текст UA</label>
+    <textarea name="content_uk" rows="8">{{ post.content_uk if post else '' }}</textarea>
+
+    <h2>English</h2>
+    <label>Title EN</label>
+    <input type="text" name="title_en" value="{{ post.title_en if post else '' }}">
+    <label>Short text EN</label>
+    <textarea name="short_text_en">{{ post.short_text_en if post else '' }}</textarea>
+    <label>Full text EN</label>
+    <textarea name="content_en" rows="8">{{ post.content_en if post else '' }}</textarea>
+
+    <h2>Deutsch</h2>
+    <label>Titel DE</label>
+    <input type="text" name="title_de" value="{{ post.title_de if post else '' }}">
+    <label>Kurzbeschreibung DE</label>
+    <textarea name="short_text_de">{{ post.short_text_de if post else '' }}</textarea>
+    <label>Text DE</label>
+    <textarea name="content_de" rows="8">{{ post.content_de if post else '' }}</textarea>
+
+    <label>Тип матеріалу</label>
+    <select name="type">
+      <option value="news" {% if not post or post.type == 'news' %}selected{% endif %}>Новина</option>
+      <option value="page" {% if post and post.type == 'page' %}selected{% endif %}>Інформаційна сторінка</option>
+    </select>
+    <label>Статус</label>
+    {% if post and post.status == 'published' %}
+      <p><strong>Опубліковано</strong>. Зміни тексту зберігаються без зняття матеріалу з сайту.</p>
+    {% else %}
+      <select name="status">
+        <option value="draft" {% if post and post.status == 'draft' %}selected{% endif %}>Чернетка</option>
+        <option value="review" {% if post and post.status == 'review' %}selected{% endif %}>На погодженні</option>
+      </select>
+      <p>Публікація здійснюється окремо уповноваженим користувачем.</p>
+    {% endif %}
+    <label for="images">Фотографії до новини (можна вибрати кілька)</label>
+    <input type="file" id="images" name="images" accept="image/jpeg,image/png,image/gif,image/webp" multiple>
+    <small>JPEG, PNG, GIF або WebP. До 8 МБ на фото. Вибрані фото додадуться після збереження новини.</small>
+    {% if post and post.type == 'news' and post_images %}
+    <p><strong>Уже додані фотографії:</strong></p>
+    <div class="post-photos-preview">
+        {% for item in post_images %}
+        <img src="{{ url_for('static',filename='uploads/' ~ item.filename) }}" alt="Фото новини" loading="lazy">
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <button type="submit">Зберегти</button>
+</form>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "admin/admin_base.html" %}
+{% block content %}
+<h1>Події</h1>
+
+<form method="post" class="form">
+<input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <label>Дата</label>
+    <input type="date" name="event_date" required>
+    <label for="start_time">Час початку</label>
+    <input id="start_time" type="time" name="start_time" value="09:00" step="60" required>
+    <label for="end_time">Час завершення</label>
+    <input id="end_time" type="time" name="end_time" value="10:00" step="60" required>
+
+    <h2>Українська</h2>
+    <label>Назва події UA</label>
+    <input type="text" name="title_uk">
+    <label>Місце UA</label>
+    <input type="text" name="location_uk">
+    <label>Опис UA</label>
+    <textarea name="description_uk" rows="5"></textarea>
+
+    <h2>English</h2>
+    <label>Event title EN</label>
+    <input type="text" name="title_en">
+    <label>Location EN</label>
+    <input type="text" name="location_en">
+    <label>Description EN</label>
+    <textarea name="description_en" rows="5"></textarea>
+
+    <h2>Deutsch</h2>
+    <label>Veranstaltungstitel DE</label>
+    <input type="text" name="title_de">
+    <label>Ort DE</label>
+    <input type="text" name="location_de">
+    <label>Beschreibung DE</label>
+    <textarea name="description_de" rows="5"></textarea>
+
+    <button type="submit">Додати подію</button>
+</form>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Дата</th>
+        <th>Назва UK</th>
+        <th>Місце UA</th>
+        <th>Статус</th><th>Дії</th>
+    </tr>
+    {% for event in events %}
+    <tr>
+        <td>{{ event.id }}</td>
+        <td>{{ event.event_date }}</td>
+        <td>{{ event.title_uk or event.title }}</td>
+        <td>{{ event.location_uk or event.location }}</td>
+        <td>{{ event.status }}</td>
+        <td>{% if event.status == 'review' and ('publisher' in session.get('roles',[]) or 'admin' in session.get('roles',[])) %}<form method="post" style="display:inline" action="{{ url_for('admin_post_publish',post_id=event.publication_id) }}">
+<input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button type="submit">Опублікувати</button></form>{% endif %}<form method="post" style="display:inline" action="{{ url_for('admin_event_delete', event_id=event.id) }}">
+<input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button type="submit" onclick="return confirm('Видалити?')">Видалити</button></form></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

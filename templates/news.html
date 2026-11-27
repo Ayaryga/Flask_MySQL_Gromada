@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ tr('news') }}{% endblock %}
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <span class="eyebrow">{{ tr('materials') }}</span>
+        <h1>{{ tr('news_page_title') }}</h1>
+        <p>{{ tr('news_page_text') }}</p>
+    </div>
+</section>
+
+<section class="container section">
+    <div class="cards news-grid">
+        {% for post in posts %}
+        <article class="card news-card">
+            {% if post.image %}
+            <img src="{{ url_for('static', filename='uploads/' ~ post.image) }}" alt="">
+            {% else %}
+            <div class="image-placeholder">NEWS</div>
+            {% endif %}
+            <div class="card-body">
+                <span class="tag">{{ post.category_name or tr('news') }}</span>
+                <h3>{{ localized(post, 'title') }}</h3>
+                <p>{{ localized(post, 'short_text') }}</p>
+                <small>{{ post.created_at }}</small>
+                <a href="{{ url_for('post_detail', lang=g.lang, post_id=post.id) }}">{{ tr('read_more') }}</a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

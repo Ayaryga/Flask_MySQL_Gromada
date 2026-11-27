@@ -1,0 +1,33 @@
+{% extends "admin/admin_base.html" %}
+{% block content %}
+<h1>Медіаматеріали</h1>
+
+<form method="post" enctype="multipart/form-data" class="form">
+<input type="hidden" name="_csrf" value="{{ csrf_token() }}">
+    <label>ID публікації, до якої прикріпити фото</label>
+    <input type="number" name="publication_id" min="1" required>
+    <label>Фото (JPEG, PNG, GIF, WEBP)</label>
+    <input type="file" name="file" accept="image/jpeg,image/png,image/gif,image/webp" required>
+    <button type="submit">Додати</button>
+</form>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Назва</th>
+        <th>Тип</th>
+        <th>Дата</th>
+        <th>Дії</th>
+    </tr>
+    {% for item in media_items %}
+    <tr>
+        <td>{{ item.id }}</td>
+        <td>{{ item.title_uk or item.title }}</td>
+        <td>{{ item.media_type }}</td>
+        <td>{{ item.created_at }}</td>
+        <td><form method="post" style="display:inline" action="{{ url_for('admin_media_delete', media_id=item.id) }}">
+<input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button type="submit" onclick="return confirm('Видалити?')">Видалити</button></form></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

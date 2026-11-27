@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Адмінпанель</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header class="site-header admin-header">
+    <div class="container header-row">
+        <a href="{{ url_for('admin_dashboard') }}" class="logo">ADMIN</a>
+        <nav>
+            <a href="{{ url_for('admin_dashboard') }}">Панель</a>
+            <a href="{{ url_for('admin_posts') }}">Матеріали</a>
+            <a href="{{ url_for('admin_media') }}">Медіа</a>
+            <a href="{{ url_for('admin_events') }}">Події</a>
+            <a href="{{ url_for('localized_index', lang='uk') }}">На сайт</a>
+            <form method="post" action="{{ url_for('admin_logout') }}" style="display:inline">
+<input type="hidden" name="_csrf" value="{{ csrf_token() }}"><button type="submit">Вийти</button></form>
+        </nav>
+    </div>
+</header>
+<main class="container section">
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>
